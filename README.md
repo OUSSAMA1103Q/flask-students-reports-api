@@ -131,6 +131,47 @@ The API runs at `http://127.0.0.1:5000`.
 2. In Postman, click **Import** and select `postman/collections/Flask_API.postman_collection.json`.
 3. Open the collection and click **Run collection**. It runs all **29 requests** in order (login, protected routes, CRUD on students and reports, and the error cases).
 
+## Run with Docker
+
+The API is containerized with a `Dockerfile` (python:3.12-slim + gunicorn) and a `docker-compose.yml`. The container runs `app1.py` and exposes port `5000`. Once it is up, the API is available at `http://127.0.0.1:5000`.
+
+The image is published on Docker Hub: **https://hub.docker.com/r/boughdiri/flask-students-reports-api**
+
+### Run from Docker Hub (quickest — no need to clone)
+
+```bash
+docker pull boughdiri/flask-students-reports-api:latest
+docker run -d -p 5000:5000 boughdiri/flask-students-reports-api:latest
+```
+
+Then open **http://127.0.0.1:5000/student** in a browser.
+
+### Run from source (with Docker Compose)
+
+```bash
+# Build the image and start the container in the background
+docker compose up -d --build
+
+# Follow the logs (Ctrl+C to stop following)
+docker compose logs -f api
+
+# Stop and remove the container
+docker compose down
+```
+
+### Endpoints
+
+| Method | URL | Example |
+|---|---|---|
+| GET | `/student` | `http://127.0.0.1:5000/student` |
+| GET | `/student/<id>` | `http://127.0.0.1:5000/student/1` |
+| POST | `/student` | `http://127.0.0.1:5000/student` |
+| GET | `/student/<id>/report` | `http://127.0.0.1:5000/student/1/report` |
+| POST | `/student/<id>/report` | `http://127.0.0.1:5000/student/1/report` |
+| GET | `/student/<id>/report/<report_id>` | `http://127.0.0.1:5000/student/1/report/0` |
+
+> **Note:** data is kept **in memory**, so any student or report you add is lost when the container restarts, and the sample data comes back.
+
 ## Notes
 
 - Data is kept **in memory**: any change is lost when the server restarts, and the sample data comes back.

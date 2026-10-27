@@ -1,0 +1,9 @@
+services:
+  api:
+    build: .
+    image: boughdiri/flask-students-reports-api:latest
+    container_name: student-api
+    ports:
+      - "5000:5000"
+    command: gunicorn --bind 0.0.0.0:5000 --access-logfile - app1:app
+    restart: unless-stopped
